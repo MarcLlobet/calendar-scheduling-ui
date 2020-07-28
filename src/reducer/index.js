@@ -31,6 +31,7 @@ const Reducer = (state = {}, action) => {
 
     case BOOK_SLOT:
       return { ...state, loadingBookSlot: true }
+
     case BOOK_SLOT_SUCCESSFUL: {
       const { loadingBookSlot, bookSlotError, ...rest } = state
       const { bookSlot } = action

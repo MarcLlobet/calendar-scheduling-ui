@@ -24,9 +24,9 @@ export const weeklySlotsError = param => ({
   param
 })
 
-export const bookSlot = param => ({
+export const bookSlot = slot => ({
   type: BOOK_SLOT,
-  param
+  slot
 })
 
 export const bookSlotSuccessful = param => ({

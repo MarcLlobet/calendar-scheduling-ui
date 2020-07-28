@@ -5,9 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import MeetingDetails from './components/meetingDetails'
-import moment from 'moment'
 
-
+import CancelMeeting from './components/cancelMeeting'
 import Calendar from './components/calendar'
 
 import { getWeeklySlots, weeklySlotsReceived } from './actions'
@@ -21,27 +20,22 @@ const useStyles = makeStyles((theme) => ({
 
 
 function App() {
-  const classes = useStyles();
-  const profesional = 'Simon Molas Ramos'
-  const meetingDetails = {
-    profesional,
-    location: "Ps. de l'Estació, 12 (bajos) 43800 Valls Tarragona",
-    agenda: moment().format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')
-  },
-    greenColor = '#00bb9c'
+  const classes = useStyles(),
+    greenColor = '#00bb9c',
+    professional = 'Simon Molas Ramos'
 
 
 
 
   return (
     <Grid container spacing={3} justify="center">
-      <Grid item xs={12} sm={10} md={8}>
+      <Grid item sm={12} md={8} lg={6}>
         <Grid item xs={12} className={classes.gridItem}>
           <Typography variant="h5" component="h1">
-            <span>Confirma tu cita con <b>{profesional}</b></span>
+            <span>Confirma tu cita con <b>{professional}</b></span>
           </Typography>
 
-          <MeetingDetails {...meetingDetails} />
+          <MeetingDetails professional={professional} />
         </Grid>
 
         <Divider variant="middle" />
@@ -59,9 +53,7 @@ function App() {
         <Divider variant="middle" />
 
         <Grid item xs={12} className={classes.gridItem}>
-          <Typography>
-            <span>¿Quieres cancelar tu cita con {profesional}?</span>
-          </Typography>
+          <CancelMeeting professional={professional} />
         </Grid>
       </Grid>
     </Grid >

@@ -36,6 +36,8 @@ export function* GetWeeklySlots(action) {
       }
     }, {})
 
+    window.slotsByDay = slotsByDay
+
     yield put({
       type: WEEKLY_SLOTS_RECEIVED,
       weeklySlots: { ...weeklySlots, [week]: slotsByDay }
@@ -46,7 +48,18 @@ export function* GetWeeklySlots(action) {
   }
 }
 
-export function* BookSlot(payload) {
+export function* BookSlot({ slot }) {
+  const extraData = {
+    Patient: {
+      Name: 'Mario',
+      SecondName: 'Neta',
+      Email: 'mario@myspace.es',
+      Phone: '555 44 33 22'
+    },
+    Comments: 'my arm hurts a lot'
+  },
+    body = JSON.stringify({ ...slot, ...extraData })
+  console.log(body)
   try {
     const endpoint = `${api}/BookSlot`,
       bookSlot = yield fetch(endpoint, {
@@ -54,7 +67,7 @@ export function* BookSlot(payload) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload)
+        body
       })
         .then(response => response.json())
 
@@ -72,11 +85,34 @@ export function* GetIntervalWeek({ selectedWeek }) {
   })
 }
 
+export function* selectNewDate({ date }) {
+  console.log(date)
+  const newMeeting = moment(date).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')
+
+
+  //   POST https://draliatest.azurewebsites.net/api/availability/BookSlot
+
+  // Payload:
+
+  //   {
+  //     "Start":"2017-06-13 11:00:00",
+  //     "End":"2017-06-13 12:00:00",
+  //     "Patient": {
+  //       "Name": "Mario",
+  //       "SecondName": "Neta",
+  //       "Email": "mario@myspace.es",
+  //       "Phone": "555 44 33 22"
+  //             },
+  //     "Comments":"my arm hurts a lot"
+  // }
+}
+
+
 
 export function* actionWatcher() {
   yield takeEvery(GET_WEEKLY_SLOTS, GetWeeklySlots)
-  yield takeEvery(BOOK_SLOT, BookSlot)
   yield takeEvery(GET_SELECTED_WEEK, GetIntervalWeek)
+  yield takeEvery(BOOK_SLOT, BookSlot)
 }
 
 export default function* rootSaga() {

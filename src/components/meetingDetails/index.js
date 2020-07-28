@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment'
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
@@ -19,6 +20,72 @@ import AgendaIcon from '@material-ui/icons/DateRange';
 
 
 import Button from '@material-ui/core/Button';
+
+
+const location = "Ps. de l'Estació, 12 (bajos) 43800 Valls Tarragona",
+  agenda = moment().format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')
+
+
+function MeetingDetails(props) {
+  const classes = useStyles();
+
+  return (
+    <>
+      <Grid item xs={12} className={classes.gridItem}>
+        <Paper>
+
+
+          <List>
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar className={classes.avatarIcon}>
+                  <PersonIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                className={classes.listItemText}
+                primary="Profesional"
+                secondary={props.professional}
+              />
+            </ListItem>
+            <ListItem className={classes['listItem--active']}>
+              <ListItemAvatar>
+                <Avatar className={classes.avatarIcon}>
+                  <AgendaIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                className={classes.listItemText}
+                primary="Fecha de la cita"
+                secondary={agenda}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar className={classes.avatarIcon}>
+                  <LocationIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                className={classes.listItemText}
+                primary="Instalación"
+                secondary={location}
+              />
+            </ListItem>
+          </List>
+
+
+        </Paper>
+      </Grid>
+      <Grid item xs={12} className={classes.gridItem}>
+        <Button variant="contained" className={classes.confirmButton}>Confirmar cita</Button>
+      </Grid>
+    </>
+  )
+}
+
+export default MeetingDetails
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,63 +114,3 @@ const useStyles = makeStyles((theme) => ({
     }
   }
 }));
-
-function MeetingDetails(props) {
-  const classes = useStyles();
-
-  return (
-    <>
-      <Grid item xs={12} className={classes.gridItem}>
-        <Paper>
-
-
-          <List>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar className={classes.avatarIcon}>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                className={classes.listItemText}
-                primary="Profesional"
-                secondary={props.profesional}
-              />
-            </ListItem>
-            <ListItem className={classes['listItem--active']}>
-              <ListItemAvatar>
-                <Avatar className={classes.avatarIcon}>
-                  <AgendaIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                className={classes.listItemText}
-                primary="Fecha de la cita"
-                secondary={props.agenda}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar className={classes.avatarIcon}>
-                  <LocationIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                className={classes.listItemText}
-                primary="Instalación"
-                secondary={props.location}
-              />
-            </ListItem>
-          </List>
-
-
-        </Paper>
-      </Grid>
-      <Grid item xs={12} className={classes.gridItem}>
-        <Button variant="contained" className={classes.confirmButton}>Confirmar cita</Button>
-      </Grid>
-    </>
-  )
-}
-
-export default MeetingDetails

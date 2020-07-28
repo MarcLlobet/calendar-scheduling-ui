@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,14 +11,16 @@ import blue from '@material-ui/core/colors/blue';
 import LeftArrow from '@material-ui/icons/ArrowBackIos';
 import RightArrow from '@material-ui/icons/ArrowForwardIos';
 
-import { getWeeklySlots, getSelectedWeek } from '../../actions'
+import { getWeeklySlots, getSelectedWeek, bookSlot } from '../../actions'
+import { capitalize } from '@material-ui/core';
 
 function Calendar({
   weeklySlots = {},
   weeklySlotsError,
   getWeeklySlots,
   selectedWeek = moment().week(),
-  getSelectedWeek
+  getSelectedWeek,
+  bookSlot
 }) {
 
   const classes = useStyles();
@@ -27,38 +29,56 @@ function Calendar({
     getWeeklySlots({ week: selectedWeek, weeklySlots })
   }, [])
 
-  const buildSlot = children => (
-    <Button variant="contained" className={classes.slot}>
-      {children}
-    </Button>
-  )
+  const initialShowMoreSlots = selectedWeek in weeklySlots
+    ? Object.keys(weeklySlots[selectedWeek]).reduce((prev, day) => ({ ...prev, [day]: false }), {})
+    : {}
+
+  const [showMoreSlots, toggleShowSlots] = useState(initialShowMoreSlots)
+
+  // const toggleShowSlots = date => {
+  //   console.log(showMoreSlots)
+  //   showMoreSlots[date] = !showMoreSlots[date]
+  //   console.log(showMoreSlots)
+  // }
 
   const getDaySlots = (selectedWeek, date) => {
     if (
       !(selectedWeek in weeklySlots)
       || !Array.isArray(weeklySlots[selectedWeek][date])
-    )
-      return null
+    ) return null
 
-    const selectedSlots = weeklySlots[selectedWeek][date]
-
-    if (selectedSlots.length <= 8)
-      return selectedSlots.map(slot =>
-        buildSlot(moment(slot.Start).format('HH:mm'))
+    const selectedSlots = weeklySlots[selectedWeek][date],
+      visibleSlots = 7,
+      slots = [...(showMoreSlots[date]
+        ? selectedSlots
+        : selectedSlots.slice(0, visibleSlots)
+      )].map(slot =>
+        (<Button
+          variant="contained"
+          disabled={slot.Taken}
+          onClick={() => slot.Taken ? {} : bookSlot(slot)}
+        >
+          {moment(slot.Start).format('HH:mm')}
+        </Button>)
+      ),
+      toggleShowButton = (
+        <Button
+          variant="contained"
+          className={classes.slot}
+          onClick={() =>
+            toggleShowSlots({
+              ...showMoreSlots,
+              [date]: !showMoreSlots[date]
+            })}>
+          <div className={classes.slot}>
+            Ver {showMoreSlots[date] ? 'menos' : 'más'} horas
+          </div>
+        </Button>
       )
 
-    const showMoreButton = (
-      <div className={classes.slot}>Ver más horas</div>
-    )
-
     return [
-
-      ...Array(8).fill().map((_, index) => (
-        buildSlot(moment(selectedSlots[index].Start).format('HH:mm')))
-      ),
-      <Button variant="contained" className={classes.slot}>
-        {showMoreButton}
-      </Button>
+      ...slots,
+      selectedSlots.length > visibleSlots && toggleShowButton
     ]
 
   }
@@ -68,16 +88,25 @@ function Calendar({
     const day = moment().week(selectedWeek).day(index + 1)
 
     const date = moment(day).format('YYYYMMDD'),
+      today = moment().format('YYYYMMDD'),
+      isPrevThanToday = date < today,
       dayMonth = day.format('DD MMM')
 
     return (
-      <div key={date} className={classes.day}>
+      <div
+        key={date}
+        className={[
+          classes.day,
+          isPrevThanToday ? classes.dayBlocked : ''
+        ].join(' ')}
+      >
         <div className={classes.headerCell}>
           <div className={classes.headerCell__weekDay}>{weekDay}</div>
           <div className={classes.headerCell__dayMonth}>{dayMonth}</div>
         </div>
         <div className={classes.bodyCell}>
-          {getDaySlots(selectedWeek, date)}
+          {!isPrevThanToday && getDaySlots(selectedWeek, date)
+          }
         </div>
       </div>
     )
@@ -136,7 +165,8 @@ const mapStateToProps = ({ weeklySlots, weeklySlotsError, selectedWeek }) => ({
 
 const mapDispatchToProps = {
   getWeeklySlots,
-  getSelectedWeek
+  getSelectedWeek,
+  bookSlot
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Calendar)
@@ -146,6 +176,7 @@ const useStyles = makeStyles((theme) => ({
   calendar: {
     display: 'flex',
     flexDirection: 'column',
+    fontSize: '0.9em'
   },
   weekInterval: {
     display: 'flex',
@@ -163,18 +194,29 @@ const useStyles = makeStyles((theme) => ({
     width: '1fr',
     flexBasis: 70,
     flexShrink: 0,
-    flexGrow: 1
+    flexGrow: 1,
+  },
+  dayBlocked: {
+    '& $headerCell__weekDay': {
+      color: grey[500],
+      fontWeight: 'normal'
+    },
+    '& $headerCell__dayMonth': {},
+    '& $bodyCell': {
+      backgroundColor: grey[100]
+    }
   },
   headerCell: {
     textAlign: 'center',
     borderTop: `1px solid ${grey[200]}`,
-    borderBottom: `1px solid ${grey[200]}`
+    borderBottom: `1px solid ${grey[200]}`,
   },
   headerCell__weekDay: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textTransform: 'capitalize'
   },
   headerCell__dayMonth: {
-    color: 'grey'
+    color: grey[500]
   },
   bodyCell: {
     flexGrow: 1,
@@ -185,6 +227,10 @@ const useStyles = makeStyles((theme) => ({
       width: 'calc(100% - 10px)',
       margin: 5,
       textTransform: 'none',
+    },
+    '& .Mui-disabled': {
+      backgroundColor: grey[300],
+      color: grey[600]
     }
   }
 }))
