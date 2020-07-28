@@ -4,6 +4,9 @@ import 'fontsource-roboto';
 import './index.css';
 import App from './App';
 
+import moment from 'moment';
+import 'moment/locale/es';
+
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
@@ -18,7 +21,7 @@ const store = createStore(reducer, applyMiddleware(sagaMiddleware, logger))
 
 sagaMiddleware.run(Sagas)
 
-
+moment.locale('es');
 
 ReactDOM.render(
   <Provider store={store}>

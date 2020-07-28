@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import blue from '@material-ui/core/colors/blue';
-import green from '@material-ui/core/colors/green';
+import lightGreen from '@material-ui/core/colors/lightGreen';
 
 import Paper from '@material-ui/core/Paper';
 
@@ -27,19 +27,20 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'transparent'
   },
   'listItem--active': {
-    backgroundColor: blue[100],
+    backgroundColor: blue[50],
     '& .MuiSvgIcon-root': {
       color: blue[500]
     }
   },
   confirmButton: {
-    backgroundColor: green.A400,
+    backgroundColor: lightGreen[800],
     color: 'white',
     textTransform: 'none'
   },
   listItemText: {
     '& .MuiListItemText-primary': {
-      color: grey[500]
+      color: grey[500],
+      fontWeight: 'bold'
     },
     '& .MuiListItemText-secondary': {
       color: 'black'

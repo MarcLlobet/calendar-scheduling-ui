@@ -4,12 +4,14 @@ import {
   WEEKLY_SLOTS_ERROR,
   BOOK_SLOT,
   BOOK_SLOT_SUCCESSFUL,
-  BOOK_SLOT_ERROR
+  BOOK_SLOT_ERROR,
+  GET_SELECTED_WEEK
 } from '../constants'
 
-export const getWeeklySlots = todaysDate => ({
+export const getWeeklySlots = ({ week, weeklySlots }) => ({
   type: GET_WEEKLY_SLOTS,
-  date: todaysDate
+  week,
+  weeklySlots
 })
 
 export const weeklySlotsReceived = ({ weeklySlots }) => ({
@@ -35,4 +37,9 @@ export const bookSlotSuccessful = param => ({
 export const bookSlotError = param => ({
   type: BOOK_SLOT_ERROR,
   param
+})
+
+export const getSelectedWeek = date => ({
+  type: GET_SELECTED_WEEK,
+  date
 })
