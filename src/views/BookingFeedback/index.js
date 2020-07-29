@@ -12,7 +12,7 @@ import red from '@material-ui/core/colors/red';
 import CheckIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Cancel';
 
-
+import { LONG_DATE } from '../../constants'
 
 function BookingFeedback({
   bookSlot,
@@ -56,10 +56,10 @@ function BookingFeedback({
                   <b>{professional}</b>
                 </Typography>
                 <Typography variant="body" component="p">
-                  <s>{moment(appointment).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')}</s>
+                  <s>{moment(appointment).format(LONG_DATE)}</s>
                 </Typography>
                 <Typography variant="body" component="p">
-                  <b>{moment(bookSlot.data.Start).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')}</b>
+                  <b>{moment(bookSlot.data.Start).format(LONG_DATE)}</b>
                 </Typography>
                 <Typography variant="body" component="p">
                   {location}

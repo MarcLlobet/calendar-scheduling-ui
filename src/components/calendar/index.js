@@ -11,6 +11,12 @@ import LeftArrow from '@material-ui/icons/ArrowBackIos';
 import RightArrow from '@material-ui/icons/ArrowForwardIos';
 
 import { getWeeklySlots, getSelectedWeek, bookSlot, handleModal } from '../../actions'
+import {
+  HOUR_MINUTE,
+  INVERSED_DATE,
+  SLASHED_DATE,
+  DAY_LONGMONTH
+} from '../../constants'
 
 function Calendar({
   weeklySlots = {},
@@ -26,19 +32,13 @@ function Calendar({
 
   useEffect(() => {
     getWeeklySlots({ week: selectedWeek, weeklySlots })
-  }, [])
+  }, [getWeeklySlots])
 
   const initialShowMoreSlots = selectedWeek in weeklySlots
     ? Object.keys(weeklySlots[selectedWeek]).reduce((prev, day) => ({ ...prev, [day]: false }), {})
     : {}
 
   const [showMoreSlots, toggleShowSlots] = useState(initialShowMoreSlots)
-
-  // const toggleShowSlots = date => {
-  //   console.log(showMoreSlots)
-  //   showMoreSlots[date] = !showMoreSlots[date]
-  //   console.log(showMoreSlots)
-  // }
 
   const getDaySlots = (selectedWeek, date) => {
     if (
@@ -58,7 +58,7 @@ function Calendar({
           disabled={slot.Taken}
           onClick={() => slot.Taken ? {} : handleModal(slot)}
         >
-          {moment(slot.Start).format('HH:mm')}
+          {moment(slot.Start).format(HOUR_MINUTE)}
         </Button>)
       ),
       toggleShowButton = (
@@ -88,10 +88,10 @@ function Calendar({
   const agenda = moment.weekdays(true).map((weekDay, index) => {
     const day = moment().week(selectedWeek).day(index + 1)
 
-    const date = moment(day).format('YYYYMMDD'),
-      today = moment().format('YYYYMMDD'),
+    const date = moment(day).format(INVERSED_DATE),
+      today = moment().format(INVERSED_DATE),
       isPrevThanToday = date < today,
-      dayMonth = day.format('DD MMM')
+      dayMonth = day.format(DAY_LONGMONTH)
 
     return (
       <div
@@ -133,9 +133,9 @@ function Calendar({
         : <div />
       }
       <div>
-        <span>{moment().week(selectedWeek).day(1).format('DD/MM/YYYY')}</span>
+        <span>{moment().week(selectedWeek).day(1).format(SLASHED_DATE)}</span>
         <span> - </span>
-        <span>{moment().week(selectedWeek).day(7).format('DD/MM/YYYY')}</span>
+        <span>{moment().week(selectedWeek).day(7).format(SLASHED_DATE)}</span>
       </div>
       <Button onClick={() => nextIntervalWeek()}><RightArrow /></Button>
     </>

@@ -1,4 +1,4 @@
-import { all, put, call, takeEvery, takeLatest } from 'redux-saga/effects';
+import { all, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import moment from 'moment'
 
 import {
@@ -11,7 +11,8 @@ import {
   BOOK_SLOT_SUCCESSFUL,
   BOOK_SLOT_ERROR,
   SELECTED_WEEK,
-  GET_SELECTED_WEEK
+  GET_SELECTED_WEEK,
+  INVERSED_DATE
 } from '../constants'
 
 export function* InitialData() {
@@ -27,7 +28,7 @@ const api = 'https://draliatest.azurewebsites.net/api/availability'
 
 const getSlotsByDay = weeklySlots =>
   weeklySlots.reduce((prev, slot) => {
-    const day = moment(slot.Start).format('YYYYMMDD')
+    const day = moment(slot.Start).format(INVERSED_DATE)
     return {
       ...prev,
       ...(prev[day]
@@ -42,7 +43,7 @@ export function* GetWeeklySlots(action) {
     const { week, weeklySlots } = action
     if (!week) throw new Error('bad Api call: date is undefined')
 
-    const monday = moment().week(week).day(1).format('YYYYMMDD')
+    const monday = moment().week(week).day(1).format(INVERSED_DATE)
 
     const endpoint = `${api}/GetWeeklySlots/${monday}`,
       apiResponse = yield fetch(endpoint)

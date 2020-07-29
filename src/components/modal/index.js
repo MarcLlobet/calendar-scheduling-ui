@@ -19,6 +19,7 @@ import green from '@material-ui/core/colors/green';
 import grey from '@material-ui/core/colors/grey';
 
 import { handleModal, bookSlot } from '../../actions'
+import { LONG_DATE } from '../../constants'
 
 function ConfirmationModal({
   appointment,
@@ -47,7 +48,7 @@ function ConfirmationModal({
           <ListItemText
             className={classes.listItemText}
             primary="Cita original"
-            secondary={moment(appointment).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')}
+            secondary={moment(appointment).format(LONG_DATE)}
             secondaryTypographyProps={{ component: 's' }}
           />
         </ListItem>
@@ -56,7 +57,7 @@ function ConfirmationModal({
           <ListItemText
             className={classes.listItemText}
             primary="Nueva fecha"
-            secondary={modalInfo && moment(modalInfo.Start).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')}
+            secondary={modalInfo && moment(modalInfo.Start).format(LONG_DATE)}
           />
         </ListItem>
       </DialogContent>

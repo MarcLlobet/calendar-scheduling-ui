@@ -22,6 +22,8 @@ import AgendaIcon from '@material-ui/icons/DateRange';
 
 import Button from '@material-ui/core/Button';
 
+import { LONG_DATE } from '../../constants'
+
 
 function MeetingDetails({ professional, appointment, location }) {
   const classes = useStyles();
@@ -54,7 +56,7 @@ function MeetingDetails({ professional, appointment, location }) {
               <ListItemText
                 className={classes.listItemText}
                 primary="Fecha de la cita"
-                secondary={moment(appointment).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')}
+                secondary={moment(appointment).format(LONG_DATE)}
               />
             </ListItem>
             <ListItem>

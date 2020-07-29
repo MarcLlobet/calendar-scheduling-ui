@@ -11,3 +11,13 @@ export const
   GET_SELECTED_WEEK = 'GET_SELECTED_WEEK',
   HANDLE_MODAL = 'HANDLE_MODAL',
   STATE = 'STATE'
+
+
+
+// moment formatting
+export const
+  HOUR_MINUTE = 'HH:mm',
+  INVERSED_DATE = 'YYYYMMDD',
+  DAY_LONGMONTH = 'DD MMM',
+  SLASHED_DATE = 'DD/MM/YYYY',
+  LONG_DATE = 'dddd[,] D [de] MMMM [de] YYYY[,] H:mm'

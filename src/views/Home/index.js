@@ -12,9 +12,7 @@ import Modal from '../../components/modal'
 
 import {
   getInitialData,
-  getWeeklySlots,
-  weeklySlotsReceived,
-  bookSlot
+  getWeeklySlots
 } from '../../actions'
 
 
