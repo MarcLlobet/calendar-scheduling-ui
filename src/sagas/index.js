@@ -73,8 +73,6 @@ export function* BookSlot({ slot }) {
     data = { ...slot, ...extraData },
     body = JSON.stringify(data)
 
-  // const newMeeting = moment(date).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')
-
   try {
     const endpoint = `${api}/BookSlot`,
       apiResponse = yield fetch(endpoint, {

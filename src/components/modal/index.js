@@ -33,7 +33,9 @@ function ConfirmationModal({
     <Dialog
       className={classes.dialog}
       onClose={() => handleModal()}
-      aria-labelledby="customized-dialog-title" open={isModalOpen}>
+      aria-labelledby="customized-dialog-title"
+      open={!!isModalOpen}
+    >
       <DialogTitle id="customized-dialog-title" onClose={() => handleModal()}>
         Por favor, confirma la nueva fecha
         <IconButton aria-label="close" className={classes.closeButton} onClick={() => handleModal()}>
