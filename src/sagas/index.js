@@ -1,7 +1,9 @@
-import { all, put, call, takeEvery } from 'redux-saga/effects';
+import { all, put, call, takeEvery, takeLatest } from 'redux-saga/effects';
 import moment from 'moment'
 
 import {
+  GET_INITIAL_DATA,
+  INITIAL_DATA,
   GET_WEEKLY_SLOTS,
   WEEKLY_SLOTS_RECEIVED,
   WEEKLY_SLOTS_ERROR,
@@ -12,7 +14,28 @@ import {
   GET_SELECTED_WEEK
 } from '../constants'
 
+export function* InitialData() {
+  yield put({
+    type: INITIAL_DATA,
+    professional: 'Simon Molas Ramos',
+    appointment: '20171001T09',
+    location: "Ps. de l'Estació, 12 (bajos) 43800 Valls Tarragona"
+  })
+}
+
 const api = 'https://draliatest.azurewebsites.net/api/availability'
+
+const getSlotsByDay = weeklySlots =>
+  weeklySlots.reduce((prev, slot) => {
+    const day = moment(slot.Start).format('YYYYMMDD')
+    return {
+      ...prev,
+      ...(prev[day]
+        ? { [day]: [...prev[day], slot] }
+        : { [day]: [slot] }
+      )
+    }
+  }, {})
 
 export function* GetWeeklySlots(action) {
   try {
@@ -25,18 +48,7 @@ export function* GetWeeklySlots(action) {
       apiResponse = yield fetch(endpoint)
         .then(response => response.json())
 
-    const slotsByDay = apiResponse.reduce((prev, slot) => {
-      const day = moment(slot.Start).format('YYYYMMDD')
-      return {
-        ...prev,
-        ...(prev[day]
-          ? { [day]: [...prev[day], slot] }
-          : { [day]: [slot] }
-        )
-      }
-    }, {})
-
-    window.slotsByDay = slotsByDay
+    const slotsByDay = getSlotsByDay(apiResponse)
 
     yield put({
       type: WEEKLY_SLOTS_RECEIVED,
@@ -58,23 +70,50 @@ export function* BookSlot({ slot }) {
     },
     Comments: 'my arm hurts a lot'
   },
-    body = JSON.stringify({ ...slot, ...extraData })
-  console.log(body)
+    data = { ...slot, ...extraData },
+    body = JSON.stringify(data)
+
+  // const newMeeting = moment(date).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')
+
   try {
     const endpoint = `${api}/BookSlot`,
-      bookSlot = yield fetch(endpoint, {
+      apiResponse = yield fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body
       })
-        .then(response => response.json())
+        .then(response => response)
 
-    yield put({ type: BOOK_SLOT_SUCCESSFUL, bookSlot })
+    // apiResponse: {
+    //   body: ReadableStream
+    //   bodyUsed: false
+    //   headers: Headers {}
+    //   ok: true
+    //   redirected: false
+    //   status: 200
+    //   statusText: "OK"
+    //   type: "cors"
+    //   url: "https://draliatest.azurewebsites.net/api/availability/BookSlot"
+    // }
 
-  } catch (bookSlotError) {
-    yield put({ type: BOOK_SLOT_ERROR, bookSlotError })
+    yield put({
+      type: BOOK_SLOT_SUCCESSFUL,
+      bookSlot: {
+        data,
+        response: apiResponse
+      }
+    })
+
+  } catch (error) {
+    yield put({
+      type: BOOK_SLOT_ERROR,
+      bookSlotError: {
+        data,
+        error
+      }
+    })
   }
 }
 
@@ -85,31 +124,9 @@ export function* GetIntervalWeek({ selectedWeek }) {
   })
 }
 
-export function* selectNewDate({ date }) {
-  console.log(date)
-  const newMeeting = moment(date).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')
-
-
-  //   POST https://draliatest.azurewebsites.net/api/availability/BookSlot
-
-  // Payload:
-
-  //   {
-  //     "Start":"2017-06-13 11:00:00",
-  //     "End":"2017-06-13 12:00:00",
-  //     "Patient": {
-  //       "Name": "Mario",
-  //       "SecondName": "Neta",
-  //       "Email": "mario@myspace.es",
-  //       "Phone": "555 44 33 22"
-  //             },
-  //     "Comments":"my arm hurts a lot"
-  // }
-}
-
-
 
 export function* actionWatcher() {
+  yield takeLatest(GET_INITIAL_DATA, InitialData)
   yield takeEvery(GET_WEEKLY_SLOTS, GetWeeklySlots)
   yield takeEvery(GET_SELECTED_WEEK, GetIntervalWeek)
   yield takeEvery(BOOK_SLOT, BookSlot)

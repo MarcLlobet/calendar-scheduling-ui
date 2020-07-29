@@ -1,12 +1,18 @@
 import {
+  GET_INITIAL_DATA,
   GET_WEEKLY_SLOTS,
   WEEKLY_SLOTS_RECEIVED,
   WEEKLY_SLOTS_ERROR,
   BOOK_SLOT,
   BOOK_SLOT_SUCCESSFUL,
   BOOK_SLOT_ERROR,
-  GET_SELECTED_WEEK
+  GET_SELECTED_WEEK,
+  HANDLE_MODAL
 } from '../constants'
+
+export const getInitialData = () => ({
+  type: GET_INITIAL_DATA
+})
 
 export const getWeeklySlots = ({ week, weeklySlots }) => ({
   type: GET_WEEKLY_SLOTS,
@@ -42,4 +48,9 @@ export const bookSlotError = param => ({
 export const getSelectedWeek = date => ({
   type: GET_SELECTED_WEEK,
   date
+})
+
+export const handleModal = slot => ({
+  type: HANDLE_MODAL,
+  isModalOpen: slot
 })

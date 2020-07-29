@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import moment from 'moment'
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -22,11 +23,7 @@ import AgendaIcon from '@material-ui/icons/DateRange';
 import Button from '@material-ui/core/Button';
 
 
-const location = "Ps. de l'Estació, 12 (bajos) 43800 Valls Tarragona",
-  agenda = moment().format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')
-
-
-function MeetingDetails(props) {
+function MeetingDetails({ professional, appointment, location }) {
   const classes = useStyles();
 
   return (
@@ -45,7 +42,7 @@ function MeetingDetails(props) {
               <ListItemText
                 className={classes.listItemText}
                 primary="Profesional"
-                secondary={props.professional}
+                secondary={professional}
               />
             </ListItem>
             <ListItem className={classes['listItem--active']}>
@@ -57,7 +54,7 @@ function MeetingDetails(props) {
               <ListItemText
                 className={classes.listItemText}
                 primary="Fecha de la cita"
-                secondary={agenda}
+                secondary={moment(appointment).format('dddd[,] D [de] MMMM [de] YYYY[,] H:mm')}
               />
             </ListItem>
             <ListItem>
@@ -84,7 +81,18 @@ function MeetingDetails(props) {
   )
 }
 
-export default MeetingDetails
+
+const mapStateToProps = ({ professional, appointment, location }) => ({
+  professional,
+  appointment,
+  location
+})
+
+const mapDispatchToProps = {
+  // confirmar cita
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MeetingDetails)
 
 
 
@@ -100,14 +108,14 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   confirmButton: {
+    marginTop: theme.spacing(2),
     backgroundColor: lightGreen[800],
     color: 'white',
     textTransform: 'none'
   },
   listItemText: {
     '& .MuiListItemText-primary': {
-      color: grey[500],
-      fontWeight: 'bold'
+      color: grey[500]
     },
     '& .MuiListItemText-secondary': {
       color: 'black'

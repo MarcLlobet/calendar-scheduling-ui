@@ -1,4 +1,6 @@
 import {
+  GET_INITIAL_DATA,
+  INITIAL_DATA,
   GET_WEEKLY_SLOTS,
   WEEKLY_SLOTS_RECEIVED,
   WEEKLY_SLOTS_ERROR,
@@ -6,12 +8,22 @@ import {
   BOOK_SLOT_SUCCESSFUL,
   BOOK_SLOT_ERROR,
   GET_SELECTED_WEEK,
-  SELECTED_WEEK
+  SELECTED_WEEK,
+  HANDLE_MODAL
 } from '../constants'
 
 const Reducer = (state = {}, action) => {
 
   switch (action.type) {
+    case GET_INITIAL_DATA: {
+      return { ...state, loadingInitialData: true }
+    }
+    case INITIAL_DATA: {
+      const { loadingInitialData, ...restState } = state,
+        { type, ...restAction } = action
+      return { ...restState, ...restAction }
+    }
+
     case GET_WEEKLY_SLOTS:
       return { ...state, loadingWeeklySlots: true }
 
@@ -40,7 +52,7 @@ const Reducer = (state = {}, action) => {
     }
 
     case BOOK_SLOT_ERROR: {
-      const { loadingBookSlot, ...rest } = state
+      const { loadingBookSlot, bookSlot, ...rest } = state
       const { bookSlotError } = action
 
       return { ...rest, bookSlotError }
@@ -54,6 +66,14 @@ const Reducer = (state = {}, action) => {
       const { loadingIntervalWeek, ...rest } = state
 
       return { ...rest, selectedWeek: loadingIntervalWeek }
+    }
+
+    case HANDLE_MODAL: {
+      const { isModalOpen: slot } = action,
+        { modalInfo, ...rest } = state,
+        isModalOpen = !!slot
+
+      return { ...rest, isModalOpen, ...(isModalOpen && { modalInfo: slot }) }
     }
 
     default:

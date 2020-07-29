@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
 import grey from '@material-ui/core/colors/grey';
 import Button from '@material-ui/core/Button';
 import blue from '@material-ui/core/colors/blue';
@@ -11,8 +10,7 @@ import blue from '@material-ui/core/colors/blue';
 import LeftArrow from '@material-ui/icons/ArrowBackIos';
 import RightArrow from '@material-ui/icons/ArrowForwardIos';
 
-import { getWeeklySlots, getSelectedWeek, bookSlot } from '../../actions'
-import { capitalize } from '@material-ui/core';
+import { getWeeklySlots, getSelectedWeek, bookSlot, handleModal } from '../../actions'
 
 function Calendar({
   weeklySlots = {},
@@ -20,7 +18,8 @@ function Calendar({
   getWeeklySlots,
   selectedWeek = moment().week(),
   getSelectedWeek,
-  bookSlot
+  bookSlot,
+  handleModal
 }) {
 
   const classes = useStyles();
@@ -54,15 +53,17 @@ function Calendar({
         : selectedSlots.slice(0, visibleSlots)
       )].map(slot =>
         (<Button
+          key={slot.Start}
           variant="contained"
           disabled={slot.Taken}
-          onClick={() => slot.Taken ? {} : bookSlot(slot)}
+          onClick={() => slot.Taken ? {} : handleModal(slot)}
         >
           {moment(slot.Start).format('HH:mm')}
         </Button>)
       ),
       toggleShowButton = (
         <Button
+          key={`${selectedWeek}-${date}`}
           variant="contained"
           className={classes.slot}
           onClick={() =>
@@ -166,7 +167,8 @@ const mapStateToProps = ({ weeklySlots, weeklySlotsError, selectedWeek }) => ({
 const mapDispatchToProps = {
   getWeeklySlots,
   getSelectedWeek,
-  bookSlot
+  bookSlot,
+  handleModal
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Calendar)
@@ -182,7 +184,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: theme.spacing(1)
   },
   agenda: {
     display: 'flex',
@@ -210,6 +213,8 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     borderTop: `1px solid ${grey[200]}`,
     borderBottom: `1px solid ${grey[200]}`,
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1)
   },
   headerCell__weekDay: {
     fontWeight: 'bold',

@@ -13,11 +13,18 @@ import { Provider } from 'react-redux'
 import { logger } from 'redux-logger'
 import reducer from './reducer'
 import Sagas from './sagas'
+import throttle from 'lodash/throttle'
 
+import { saveState, loadState } from './localStorage'
 import * as serviceWorker from './serviceWorker';
 const sagaMiddleware = createSagaMiddleware()
 
-const store = createStore(reducer, applyMiddleware(sagaMiddleware, logger))
+const persistedState = loadState()
+const store = createStore(reducer, persistedState, applyMiddleware(sagaMiddleware, logger))
+
+store.subscribe(throttle(() => {
+  saveState(store.getState())
+}, 1000))
 
 sagaMiddleware.run(Sagas)
 
