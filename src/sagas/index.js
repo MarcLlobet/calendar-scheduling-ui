@@ -1,4 +1,4 @@
-import { all, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { all, put, takeEvery } from 'redux-saga/effects';
 import moment from 'moment'
 
 import {

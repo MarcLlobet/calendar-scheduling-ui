@@ -191,6 +191,7 @@ const useStyles = makeStyles((theme) => ({
   agenda: {
     display: 'flex',
     flexDirection: 'row',
+    minHeight: 468
   },
   day: {
     display: 'flex',
