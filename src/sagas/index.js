@@ -26,21 +26,23 @@ export function* InitialData() {
 
 const api = 'https://draliatest.azurewebsites.net/api/availability'
 
-const getSlotsByDay = weeklySlots =>
-  weeklySlots.reduce((prev, slot) => {
-    const day = moment(slot.Start).format(INVERSED_DATE)
-    return {
-      ...prev,
-      ...(prev[day]
-        ? { [day]: [...prev[day], slot] }
-        : { [day]: [slot] }
-      )
-    }
-  }, {})
+export const getSlotsByDay = weeklySlots =>
+  weeklySlots
+    ? weeklySlots.reduce((prev, slot) => {
+      const day = moment(slot.Start).format(INVERSED_DATE)
+      return {
+        ...prev,
+        ...(prev[day]
+          ? { [day]: [...prev[day], slot] }
+          : { [day]: [slot] }
+        )
+      }
+    }, {})
+    : {}
 
 export function* GetWeeklySlots(action) {
   try {
-    const { week, weeklySlots } = action
+    const { week, weeklySlots = {} } = action
     if (!week) throw new Error('bad Api call: date is undefined')
 
     const monday = moment().week(week).day(1).format(INVERSED_DATE)
@@ -85,18 +87,6 @@ export function* BookSlot({ slot }) {
       })
         .then(response => response)
 
-    // apiResponse: {
-    //   body: ReadableStream
-    //   bodyUsed: false
-    //   headers: Headers {}
-    //   ok: true
-    //   redirected: false
-    //   status: 200
-    //   statusText: "OK"
-    //   type: "cors"
-    //   url: "https://draliatest.azurewebsites.net/api/availability/BookSlot"
-    // }
-
     yield put({
       type: BOOK_SLOT_SUCCESSFUL,
       bookSlot: {
@@ -119,13 +109,13 @@ export function* BookSlot({ slot }) {
 export function* GetIntervalWeek({ selectedWeek }) {
   yield put({
     type: SELECTED_WEEK,
-    selectedWeek: moment().week(selectedWeek)
+    selectedWeek
   })
 }
 
 
 export function* actionWatcher() {
-  yield takeLatest(GET_INITIAL_DATA, InitialData)
+  yield takeEvery(GET_INITIAL_DATA, InitialData)
   yield takeEvery(GET_WEEKLY_SLOTS, GetWeeklySlots)
   yield takeEvery(GET_SELECTED_WEEK, GetIntervalWeek)
   yield takeEvery(BOOK_SLOT, BookSlot)

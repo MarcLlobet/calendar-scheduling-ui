@@ -12,7 +12,7 @@ function Footer() {
       <Grid item xs={12} className={classes.footer__logo}>
 
         <img
-          src={`${process.env.PUBLIC_URL}/doctoralia.png`}
+          src={`${process.env.PUBLIC_URL}/doctoralia_logo.png`}
           alt="Doctoralia"
           width={200} />
 

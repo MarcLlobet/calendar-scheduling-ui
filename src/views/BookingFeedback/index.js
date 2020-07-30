@@ -52,16 +52,16 @@ function BookingFeedback({
           {isSuccessful
             ? (
               <div className={classes.body}>
-                <Typography variant="body" component="p">
+                <Typography variant="body1" component="p">
                   <b>{professional}</b>
                 </Typography>
-                <Typography variant="body" component="p">
+                <Typography variant="body1" component="p">
                   <s>{moment(appointment).format(LONG_DATE)}</s>
                 </Typography>
-                <Typography variant="body" component="p">
-                  <b>{moment(bookSlot.data.Start).format(LONG_DATE)}</b>
+                <Typography variant="body1" component="p">
+                  <b>{bookSlot && moment(bookSlot.data.Start).format(LONG_DATE)}</b>
                 </Typography>
-                <Typography variant="body" component="p">
+                <Typography variant="body1" component="p">
                   {location}
                 </Typography>
               </div>

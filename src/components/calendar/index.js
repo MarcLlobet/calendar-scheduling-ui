@@ -34,6 +34,7 @@ function Calendar({
     getWeeklySlots({ week: selectedWeek, weeklySlots })
   }, [getWeeklySlots])
 
+
   const initialShowMoreSlots = selectedWeek in weeklySlots
     ? Object.keys(weeklySlots[selectedWeek]).reduce((prev, day) => ({ ...prev, [day]: false }), {})
     : {}
@@ -130,7 +131,7 @@ function Calendar({
         ? (<Button onClick={() => prevIntervalWeek()}>
           <LeftArrow />
         </Button>)
-        : <div />
+        : <div style={{ width: 64 }} />
       }
       <div>
         <span>{moment().week(selectedWeek).day(1).format(SLASHED_DATE)}</span>

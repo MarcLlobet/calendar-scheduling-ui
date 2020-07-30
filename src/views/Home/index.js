@@ -16,7 +16,7 @@ import {
 } from '../../actions'
 
 
-function App({ getInitialData, professional }) {
+function Home({ getInitialData, professional }) {
 
   useEffect(() => {
     getInitialData()
@@ -77,7 +77,7 @@ const mapDispatchToProps = {
   getWeeklySlots
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
 
 
 const useStyles = makeStyles((theme) => ({
