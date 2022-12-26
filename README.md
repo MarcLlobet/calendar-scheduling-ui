@@ -1,4 +1,4 @@
-![image-screenshot](doctest-screenshot.png)
+![image-screenshot](doctest-screenshot.gif)
 A reschedule calendar.
 
 ## Instalation
