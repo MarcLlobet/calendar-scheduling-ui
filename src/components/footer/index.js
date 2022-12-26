@@ -10,15 +10,9 @@ function Footer() {
   return (
     <>
       <Grid item xs={12} className={classes.footer__logo}>
-
-        <img
-          src={`${process.env.PUBLIC_URL}/doctoralia_logo.png`}
-          alt="Doctoralia"
-          width={200} />
-
       </Grid>
       <Grid item sm={12} md={8} lg={6} className={classes.footer__text}>
-        <p>www.docplanner.com &copy; 2019 - ¡Reserva cita sin necesidad de llamar!</p>
+        <p>2019 - ¡Reserva cita sin necesidad de llamar!</p>
 
         <p>Utilizamos cookies propias y de terceros para mejorar nuestra servicio. Puede configurar el acceso a dichas cookies desde su navegador u obtener más información en nuestras <a href="#">condiciones generales</a>.</p>
       </Grid>
