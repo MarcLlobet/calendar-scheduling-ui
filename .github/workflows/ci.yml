@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
 
       - name: 📦 Install dependencies
         run: npm install
-        
+
       - name: 🛠️ Build
         run: npm run build
 
