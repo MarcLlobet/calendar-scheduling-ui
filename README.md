@@ -1,7 +1,7 @@
 ![image-screenshot](doctest-screenshot.gif)
 A reschedule calendar.
 
-## Instalation
+## Installation
 Run `npm i`
 
 ## Deploy locally
