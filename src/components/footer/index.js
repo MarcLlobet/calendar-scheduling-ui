@@ -14,6 +14,7 @@ function Footer() {
       <Grid item sm={12} md={8} lg={6} className={classes.footer__text}>
         <p>2019 - ¡Reserva cita sin necesidad de llamar!</p>
 
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <p>Utilizamos cookies propias y de terceros para mejorar nuestra servicio. Puede configurar el acceso a dichas cookies desde su navegador u obtener más información en nuestras <a href="#">condiciones generales</a>.</p>
       </Grid>
     </>
