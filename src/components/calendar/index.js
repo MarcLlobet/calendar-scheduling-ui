@@ -31,7 +31,9 @@ function Calendar({
   const classes = useStyles();
 
   useEffect(() => {
-    getWeeklySlots({ week: selectedWeek, weeklySlots })
+    if (!(selectedWeek in weeklySlots)) {
+      getWeeklySlots({ week: selectedWeek, weeklySlots })
+    }
   }, [getWeeklySlots, selectedWeek, weeklySlots])
 
 

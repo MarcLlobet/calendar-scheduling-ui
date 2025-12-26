@@ -7,17 +7,17 @@ import Footer from './components/footer'
 
 import Grid from '@material-ui/core/Grid';
 
-function App({ bookSlot, bookSlotError }) {
-  const Main = () => {
-    if (bookSlot || bookSlotError)
-      return <BookingFeedback />
-    return <Home />
-  }
+const Main = ({ bookSlot, bookSlotError }) => {
+  if (bookSlot || bookSlotError)
+    return <BookingFeedback />
+  return <Home />
+}
 
+function App({ bookSlot, bookSlotError }) {
   return (
     <Grid container spacing={3} justify="center">
       <Grid item sm={12} md={8} lg={6}>
-        <Main />
+        <Main bookSlot={bookSlot} bookSlotError={bookSlotError} />
       </Grid>
       <Footer />
     </Grid>
