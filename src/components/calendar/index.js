@@ -32,7 +32,7 @@ function Calendar({
 
   useEffect(() => {
     getWeeklySlots({ week: selectedWeek, weeklySlots })
-  }, [getWeeklySlots])
+  }, [getWeeklySlots, selectedWeek, weeklySlots])
 
 
   const initialShowMoreSlots = selectedWeek in weeklySlots
