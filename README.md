@@ -1,3 +1,5 @@
+# scheduling-ui
+
 ![image-screenshot](doctest-screenshot.gif)
 A reschedule calendar.
 
